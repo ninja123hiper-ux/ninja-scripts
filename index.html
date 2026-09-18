@@ -605,7 +605,7 @@
             document.getElementById('guestActions').style.display = 'none';
             document.getElementById('userActions').style.display = 'flex';
             document.getElementById('userEmailDisplay').innerText = currentUser.email + (isAdmin ? ' 👑' : '');
-            document.getElementById('postScriptBtn').style.display = isAdmin ? 'none' : 'inline-block';
+            document.getElementById('postScriptBtn').style.display = 'inline-block';
         } else {
             document.getElementById('guestActions').style.display = 'flex';
             document.getElementById('userActions').style.display = 'none';
@@ -766,7 +766,6 @@
     // Abre o modal para criar um script novo (sem argumento) ou editar um existente (passando o id)
     function openScriptModal(id) {
         if (!currentUser) return showToast('Crie uma conta ou faça login primeiro!', 'error');
-        if (isAdmin && !id) return showToast('Contas admin apenas apagam scripts, não postam.', 'error');
 
         const nameInput = document.getElementById('scriptName');
         const gameSelect = document.getElementById('scriptGame');
@@ -777,7 +776,7 @@
         if (id) {
             const s = scriptsData.find(x => x.id === id);
             if (!s) return;
-            if (s.user_id !== currentUser.id) return showToast('Você só pode editar seus próprios scripts.', 'error');
+            if (s.user_id !== currentUser.id && !isAdmin) return showToast('Você só pode editar seus próprios scripts.', 'error');
             editingScriptId = id;
             document.getElementById('scriptModalTitle').textContent = 'Editar Script';
             document.getElementById('saveScriptBtnLabel').textContent = 'Salvar Alterações';
@@ -847,8 +846,8 @@
         let html = '<div class="script-list">';
         filtered.forEach((s, i) => {
             const safeCode = btoa(unescape(encodeURIComponent(s.code)));
-            // Editar: só quem postou o script (e não é o admin, que só apaga)
-            const showEdit = currentUser && !isAdmin && s.user_id === currentUser.id;
+            // Editar: dono do script sempre pode; admin pode editar qualquer um também
+            const showEdit = currentUser && (isAdmin || s.user_id === currentUser.id);
             // Apagar: só a conta admin
             const showDelete = isAdmin;
 
