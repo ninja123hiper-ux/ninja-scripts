@@ -447,7 +447,7 @@
         <div class="user-info" id="userActions">
             <span class="user-email" id="userEmailDisplay"></span>
             <button class="btn-outline" onclick="logout()">Sair</button>
-            <button class="btn-primary" onclick="openScriptModal()">+ Postar Script</button>
+            <button class="btn-primary" id="postScriptBtn" onclick="openScriptModal()">+ Postar Script</button>
         </div>
     </div>
 
@@ -468,10 +468,6 @@
 
     <div id="contentArea">
         <div class="empty-state">Carregando scripts da nuvem...</div>
-    </div>
-
-    <div class="footer">
-        <span onclick="toggleAdmin()" title="Acesso administrador" style="cursor:pointer; opacity:0.5;">🔒</span>
     </div>
 </div>
 
@@ -494,10 +490,10 @@
     </div>
 </div>
 
-<!-- Modal de Adicionar Script -->
+<!-- Modal de Adicionar/Editar Script -->
 <div class="modal-overlay" id="scriptModal">
     <div class="modal">
-        <h2>Adicionar Novo Script</h2>
+        <h2 id="scriptModalTitle">Adicionar Novo Script</h2>
         <div class="form-group">
             <label>Nome do Script</label>
             <input type="text" id="scriptName" placeholder="Ex: Auto Farm Level Max">
@@ -523,7 +519,7 @@
         </div>
         <div class="modal-actions">
             <button class="btn-outline" onclick="closeScriptModal()">Cancelar</button>
-            <button class="btn-primary" id="saveScriptBtn" onclick="saveScript()">Salvar na Nuvem</button>
+            <button class="btn-primary" id="saveScriptBtn" onclick="saveScript()"><span id="saveScriptBtnLabel">Salvar na Nuvem</span></button>
         </div>
     </div>
 </div>
@@ -579,23 +575,42 @@
     async function checkUser() {
         const { data: { session } } = await sb.auth.getSession();
         currentUser = session ? session.user : null;
+        await refreshAdminStatus();
         updateUI();
     }
 
-    sb.auth.onAuthStateChange((event, session) => {
+    sb.auth.onAuthStateChange(async (event, session) => {
         currentUser = session ? session.user : null;
+        await refreshAdminStatus();
         updateUI();
     });
+
+    // Verifica no banco se a conta logada é admin (coluna is_admin em profiles)
+    async function refreshAdminStatus() {
+        if (!currentUser) { isAdmin = false; return; }
+        try {
+            const { data, error } = await sb
+                .from('profiles')
+                .select('is_admin')
+                .eq('id', currentUser.id)
+                .single();
+            isAdmin = !error && data && data.is_admin === true;
+        } catch (e) {
+            isAdmin = false;
+        }
+    }
 
     function updateUI() {
         if (currentUser) {
             document.getElementById('guestActions').style.display = 'none';
             document.getElementById('userActions').style.display = 'flex';
-            document.getElementById('userEmailDisplay').innerText = currentUser.email;
+            document.getElementById('userEmailDisplay').innerText = currentUser.email + (isAdmin ? ' 👑' : '');
+            document.getElementById('postScriptBtn').style.display = isAdmin ? 'none' : 'inline-block';
         } else {
             document.getElementById('guestActions').style.display = 'flex';
             document.getElementById('userActions').style.display = 'none';
         }
+        filterScripts();
     }
 
     function openAuthModal(mode) {
@@ -683,6 +698,8 @@
         filterScripts();
     }
 
+    let editingScriptId = null;
+
     async function saveScript() {
         if (!currentUser) return showToast('Você precisa criar conta e entrar para postar scripts!', 'error');
         
@@ -698,30 +715,37 @@
         if (!code.trim()) { codeInput.classList.add('input-error'); return showToast('Cole o código do script.', 'error'); }
 
         const btn = document.getElementById('saveScriptBtn');
-        const originalLabel = btn.innerText;
+        const label = document.getElementById('saveScriptBtnLabel');
+        const originalLabel = label.textContent;
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner"></span>';
 
         try {
-            const { error } = await sb
-                .from('scripts')
-                .insert([{ name, game, code, user_id: currentUser.id }]);
+            let error;
+            if (editingScriptId) {
+                ({ error } = await sb
+                    .from('scripts')
+                    .update({ name, game, code })
+                    .eq('id', editingScriptId));
+            } else {
+                ({ error } = await sb
+                    .from('scripts')
+                    .insert([{ name, game, code, user_id: currentUser.id }]));
+            }
 
             if (error) {
                 showToast('Erro ao salvar no Supabase.', 'error');
                 console.error(error);
             } else {
-                document.getElementById('scriptName').value = '';
-                document.getElementById('scriptCode').value = '';
                 closeScriptModal();
-                showToast('Script salvo com sucesso!', 'success');
+                showToast(editingScriptId ? 'Script atualizado!' : 'Script salvo com sucesso!', 'success');
                 fetchScripts();
             }
         } catch (e) {
             showToast('Não foi possível conectar. Tente novamente.', 'error');
         } finally {
             btn.disabled = false;
-            btn.innerText = originalLabel;
+            btn.innerHTML = `<span id="saveScriptBtnLabel">${originalLabel}</span>`;
         }
     }
 
@@ -739,30 +763,42 @@
         }
     }
 
-    // --- Interface & UX ---
-    function toggleAdmin() {
-        if (isAdmin) {
-            isAdmin = false;
-            showToast('Modo Dono desativado.', 'success');
-        } else {
-            const pass = prompt('Senha do Dono:');
-            if (pass === 'ninja123') {
-                isAdmin = true;
-                showToast('Modo Dono ativado!', 'success');
-            } else if (pass) {
-                showToast('Senha incorreta!', 'error');
-            }
-        }
-        filterScripts(); // atualiza a tela
-    }
-
-    function openScriptModal() {
+    // Abre o modal para criar um script novo (sem argumento) ou editar um existente (passando o id)
+    function openScriptModal(id) {
         if (!currentUser) return showToast('Crie uma conta ou faça login primeiro!', 'error');
+        if (isAdmin && !id) return showToast('Contas admin apenas apagam scripts, não postam.', 'error');
+
+        const nameInput = document.getElementById('scriptName');
+        const gameSelect = document.getElementById('scriptGame');
+        const codeInput = document.getElementById('scriptCode');
+        nameInput.classList.remove('input-error');
+        codeInput.classList.remove('input-error');
+
+        if (id) {
+            const s = scriptsData.find(x => x.id === id);
+            if (!s) return;
+            if (s.user_id !== currentUser.id) return showToast('Você só pode editar seus próprios scripts.', 'error');
+            editingScriptId = id;
+            document.getElementById('scriptModalTitle').textContent = 'Editar Script';
+            document.getElementById('saveScriptBtnLabel').textContent = 'Salvar Alterações';
+            nameInput.value = s.name;
+            gameSelect.value = s.game;
+            codeInput.value = s.code;
+        } else {
+            editingScriptId = null;
+            document.getElementById('scriptModalTitle').textContent = 'Adicionar Novo Script';
+            document.getElementById('saveScriptBtnLabel').textContent = 'Salvar na Nuvem';
+            nameInput.value = '';
+            gameSelect.value = 'Blox Fruits';
+            codeInput.value = '';
+        }
+
         document.getElementById('scriptModal').style.display = 'flex';
     }
 
     function closeScriptModal() {
         document.getElementById('scriptModal').style.display = 'none';
+        editingScriptId = null;
     }
     
     function copyScript(btn, codeBase64) {
@@ -811,8 +847,10 @@
         let html = '<div class="script-list">';
         filtered.forEach((s, i) => {
             const safeCode = btoa(unescape(encodeURIComponent(s.code)));
-            // Só mostra o botão de apagar se for o admin
-            const deleteBtnStyle = isAdmin ? 'display: block;' : 'display: none;';
+            // Editar: só quem postou o script (e não é o admin, que só apaga)
+            const showEdit = currentUser && !isAdmin && s.user_id === currentUser.id;
+            // Apagar: só a conta admin
+            const showDelete = isAdmin;
 
             html += `
                 <div class="script-card" style="animation-delay:${Math.min(i, 10) * 0.05}s">
@@ -822,7 +860,8 @@
                     </div>
                     <div class="action-btns">
                         <button class="btn-outline" onclick="copyScript(this, '${safeCode}')">Copiar Script</button>
-                        <button class="btn-delete" style="${deleteBtnStyle}" onclick="deleteScript(${s.id})">Apagar (Admin)</button>
+                        ${showEdit ? `<button class="btn-outline" onclick="openScriptModal(${s.id})">Editar</button>` : ''}
+                        ${showDelete ? `<button class="btn-delete" onclick="deleteScript(${s.id})">Apagar</button>` : ''}
                     </div>
                 </div>
             `;
