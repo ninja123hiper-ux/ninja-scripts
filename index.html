@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ninja Scripts</title>
     <!-- Favicon corrigido (SVG de uma Shuriken/Espada para não bugar no Windows) -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238B5CF6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14.5 17.5L3 6V3h3l11.5 11.5'/><path d='M13 19l6-6'/><path d='M16 16l4 4'/><path d='M19 21l2-2'/><path d='M11 9L8 12'/></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%238B5CF6'/><stop offset='100%25' stop-color='%23D946EF'/></linearGradient></defs><rect width='24' height='24' rx='6' fill='%2309090b'/><path d='M14.5 17.5L3 6V3h3l11.5 11.5' stroke='url(%23g)' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/><path d='M13 19l6-6' stroke='url(%23g)' stroke-width='2' fill='none' stroke-linecap='round'/><path d='M16 16l4 4' stroke='url(%23g)' stroke-width='2' fill='none' stroke-linecap='round'/><path d='M19 21l2-2' stroke='url(%23g)' stroke-width='2' fill='none' stroke-linecap='round'/><path d='M11 9L8 12' stroke='url(%23g)' stroke-width='2' fill='none' stroke-linecap='round'/></svg>">
     
     <!-- Fonte bonita do Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -64,6 +64,7 @@
         }
         
         .logo-svg {
+            position: relative;
             background: linear-gradient(135deg, #8b5cf6, #d946ef);
             border-radius: 12px;
             width: 48px;
@@ -71,7 +72,29 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+            box-shadow: 0 0 18px rgba(139, 92, 246, 0.5), inset 0 0 12px rgba(255,255,255,0.15);
+            flex-shrink: 0;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+        .logo-area:hover .logo-svg {
+            transform: rotate(-8deg) scale(1.06);
+            box-shadow: 0 0 26px rgba(217, 70, 239, 0.6), inset 0 0 12px rgba(255,255,255,0.2);
+        }
+        .logo-ring {
+            position: absolute;
+            inset: -4px;
+            border-radius: 14px;
+            border: 1.5px solid rgba(217, 70, 239, 0.55);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .logo-area:hover .logo-ring {
+            opacity: 1;
+            animation: ringPulse 1.6s ease-out infinite;
+        }
+        @keyframes ringPulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            100% { transform: scale(1.35); opacity: 0; }
         }
         
         .title h1 {
@@ -318,6 +341,79 @@
         }
         .footer span { cursor: pointer; color: var(--text-muted); transition: 0.2s; }
         .footer span:hover { color: white; }
+
+        /* --- Animações de entrada --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+        }
+        .header { animation: fadeInUp 0.5s ease both; }
+        .search-bar { animation: fadeInUp 0.5s ease 0.06s both; }
+        .tabs { animation: fadeInUp 0.5s ease 0.1s both; }
+        .script-card { animation: fadeInUp 0.4s ease both; }
+
+        /* --- Foco visível (acessibilidade) --- */
+        button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, .tab:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+        button:active { transform: scale(0.97); }
+
+        /* --- Estado de carregamento em botões --- */
+        .btn-loading { opacity: 0.7; pointer-events: none; display: inline-flex; align-items: center; gap: 8px; }
+        .spinner {
+            width: 14px; height: 14px;
+            border: 2px solid rgba(255,255,255,0.35);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- Toasts --- */
+        #toastBox {
+            position: fixed;
+            left: 50%;
+            bottom: 24px;
+            transform: translateX(-50%);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+        .toast {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 12px 18px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 10px 28px rgba(0,0,0,0.5);
+            animation: fadeInUp 0.25s ease both;
+            white-space: nowrap;
+        }
+        .toast.success { color: #10b981; border-color: rgba(16,185,129,0.4); }
+        .toast.error { color: var(--danger); border-color: rgba(239,68,68,0.4); }
+
+        /* --- Erro em campo de formulário --- */
+        .input-error { border-color: var(--danger) !important; box-shadow: 0 0 0 3px rgba(239,68,68,0.15) !important; }
+
+        /* --- Responsividade --- */
+        @media (max-width: 640px) {
+            body { padding: 14px; }
+            .header { flex-wrap: wrap; gap: 14px; padding: 16px; }
+            .header-actions, .user-info { width: 100%; justify-content: flex-end; }
+            .title h1 { font-size: 19px; }
+            .script-card { flex-direction: column; align-items: flex-start; gap: 14px; }
+            .action-btns { width: 100%; }
+            .action-btns button { flex: 1; }
+        }
     </style>
 </head>
 <body>
@@ -326,7 +422,14 @@
     <div class="header">
         <div class="logo-area">
             <div class="logo-svg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"/><path d="M13 19l6-6"/><path d="M16 16l4 4"/><path d="M19 21l2-2"/><path d="M11 9L8 12"/></svg>
+                <div class="logo-ring"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.5 17.5L3 6V3h3l11.5 11.5"/>
+                    <path d="M13 19l6-6"/>
+                    <path d="M16 16l4 4"/>
+                    <path d="M19 21l2-2"/>
+                    <path d="M11 9L8 12"/>
+                </svg>
             </div>
             <div class="title">
                 <h1>Ninja Scripts</h1>
@@ -368,8 +471,7 @@
     </div>
 
     <div class="footer">
-        Desenvolvido com Supabase & Vercel <br><br>
-        <span onclick="toggleAdmin()">🔒 Acesso Admin (Dono)</span>
+        <span onclick="toggleAdmin()" title="Acesso administrador" style="cursor:pointer; opacity:0.5;">🔒</span>
     </div>
 </div>
 
@@ -379,11 +481,11 @@
         <h2 id="authTitle">Entrar</h2>
         <div class="form-group">
             <label>E-mail</label>
-            <input type="email" id="authEmail" placeholder="seu@email.com">
+            <input type="email" id="authEmail" placeholder="seu@email.com" onkeydown="if(event.key==='Enter') handleAuth()">
         </div>
         <div class="form-group">
             <label>Senha</label>
-            <input type="password" id="authPassword" placeholder="******">
+            <input type="password" id="authPassword" placeholder="Mínimo 6 caracteres" onkeydown="if(event.key==='Enter') handleAuth()">
         </div>
         <div class="modal-actions">
             <button class="btn-outline" onclick="closeAuthModal()">Cancelar</button>
@@ -421,16 +523,18 @@
         </div>
         <div class="modal-actions">
             <button class="btn-outline" onclick="closeScriptModal()">Cancelar</button>
-            <button class="btn-primary" onclick="saveScript()">Salvar na Nuvem</button>
+            <button class="btn-primary" id="saveScriptBtn" onclick="saveScript()">Salvar na Nuvem</button>
         </div>
     </div>
 </div>
+
+<div id="toastBox"></div>
 
 <script>
     // Conexão com o Supabase usando as chaves fornecidas
     const SUPABASE_URL = 'https://qdrqqyrkbvzpschcdlws.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_Ukvl_bK8a0okV6Z_7Fc0xA_nU_y5Yk8';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let scriptsData = [];
     let currentCategory = 'Todos';
@@ -438,14 +542,47 @@
     let currentUser = null;
     let authMode = 'login'; // 'login' ou 'register'
 
+    // --- Toasts (feedback visual) ---
+    function showToast(message, type) {
+        const box = document.getElementById('toastBox');
+        const el = document.createElement('div');
+        el.className = 'toast ' + (type || '');
+        el.textContent = message;
+        box.appendChild(el);
+        setTimeout(() => {
+            el.style.transition = 'opacity .25s ease';
+            el.style.opacity = '0';
+            setTimeout(() => el.remove(), 250);
+        }, 3000);
+    }
+
+    function escapeHtml(str) {
+        return String(str ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function translateAuthError(msg) {
+        if (!msg) return 'Ocorreu um erro. Tente novamente.';
+        const m = msg.toLowerCase();
+        if (m.includes('already registered') || m.includes('already exists')) return 'Este e-mail já possui uma conta. Tente entrar.';
+        if (m.includes('invalid login credentials')) return 'E-mail ou senha incorretos.';
+        if (m.includes('email not confirmed')) return 'Confirme seu e-mail antes de entrar (verifique sua caixa de entrada).';
+        if (m.includes('password') && m.includes('6')) return 'A senha precisa ter no mínimo 6 caracteres.';
+        if (m.includes('invalid email')) return 'Digite um e-mail válido.';
+        return msg;
+    }
+
     // --- Autenticação ---
     async function checkUser() {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session } } = await sb.auth.getSession();
         currentUser = session ? session.user : null;
         updateUI();
     }
 
-    supabase.auth.onAuthStateChange((event, session) => {
+    sb.auth.onAuthStateChange((event, session) => {
         currentUser = session ? session.user : null;
         updateUI();
     });
@@ -472,38 +609,66 @@
         document.getElementById('authModal').style.display = 'none';
         document.getElementById('authEmail').value = '';
         document.getElementById('authPassword').value = '';
+        document.getElementById('authEmail').classList.remove('input-error');
+        document.getElementById('authPassword').classList.remove('input-error');
     }
 
     async function handleAuth() {
-        const email = document.getElementById('authEmail').value;
+        const email = document.getElementById('authEmail').value.trim();
         const password = document.getElementById('authPassword').value;
-        
-        if (!email || !password) return alert('Preencha todos os campos!');
+        const emailInput = document.getElementById('authEmail');
+        const passInput = document.getElementById('authPassword');
+        emailInput.classList.remove('input-error');
+        passInput.classList.remove('input-error');
 
-        let error;
-        if (authMode === 'register') {
-            const { error: signUpError } = await supabase.auth.signUp({ email, password });
-            error = signUpError;
-            if (!error) alert('Conta criada! Você já pode entrar.');
-        } else {
-            const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-            error = signInError;
+        if (!email) { emailInput.classList.add('input-error'); return showToast('Digite seu e-mail.', 'error'); }
+        if (!password) { passInput.classList.add('input-error'); return showToast('Digite sua senha.', 'error'); }
+        if (authMode === 'register' && password.length < 6) {
+            passInput.classList.add('input-error');
+            return showToast('A senha precisa ter no mínimo 6 caracteres.', 'error');
         }
 
-        if (error) {
-            alert('Erro: ' + error.message);
-        } else {
-            closeAuthModal();
+        const btn = document.getElementById('authSubmitBtn');
+        const originalLabel = btn.innerText;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span>';
+
+        try {
+            let error;
+            if (authMode === 'register') {
+                const { error: signUpError } = await sb.auth.signUp({ email, password });
+                error = signUpError;
+                if (!error) {
+                    showToast('Conta criada! Verifique seu e-mail se for solicitado.', 'success');
+                    closeAuthModal();
+                }
+            } else {
+                const { error: signInError } = await sb.auth.signInWithPassword({ email, password });
+                error = signInError;
+                if (!error) {
+                    showToast('Login realizado com sucesso!', 'success');
+                    closeAuthModal();
+                }
+            }
+            if (error) {
+                showToast(translateAuthError(error.message), 'error');
+            }
+        } catch (e) {
+            showToast('Não foi possível conectar. Verifique sua internet.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerText = originalLabel;
         }
     }
 
     async function logout() {
-        await supabase.auth.signOut();
+        await sb.auth.signOut();
+        showToast('Você saiu da sua conta.', 'success');
     }
 
     // --- Funções de Banco de Dados (Supabase) ---
     async function fetchScripts() {
-        const { data, error } = await supabase
+        const { data, error } = await sb
             .from('scripts')
             .select('*')
             .order('id', { ascending: false });
@@ -519,40 +684,58 @@
     }
 
     async function saveScript() {
-        if (!currentUser) return alert('Você precisa criar conta e entrar para postar scripts!');
+        if (!currentUser) return showToast('Você precisa criar conta e entrar para postar scripts!', 'error');
         
-        const name = document.getElementById('scriptName').value;
+        const nameInput = document.getElementById('scriptName');
+        const codeInput = document.getElementById('scriptCode');
+        const name = nameInput.value.trim();
         const game = document.getElementById('scriptGame').value;
-        const code = document.getElementById('scriptCode').value;
+        const code = codeInput.value;
 
-        if(!name || !code) return alert('Preencha o nome e o código!');
+        nameInput.classList.remove('input-error');
+        codeInput.classList.remove('input-error');
+        if (!name) { nameInput.classList.add('input-error'); return showToast('Preencha o nome do script.', 'error'); }
+        if (!code.trim()) { codeInput.classList.add('input-error'); return showToast('Cole o código do script.', 'error'); }
 
-        document.getElementById('scriptModal').style.display = 'none';
-        
-        const { error } = await supabase
-            .from('scripts')
-            .insert([{ name, game, code }]);
+        const btn = document.getElementById('saveScriptBtn');
+        const originalLabel = btn.innerText;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span>';
 
-        if (error) {
-            alert('Erro ao salvar no Supabase!');
-            console.error(error);
-        } else {
-            document.getElementById('scriptName').value = '';
-            document.getElementById('scriptCode').value = '';
-            fetchScripts(); // recarrega a lista
+        try {
+            const { error } = await sb
+                .from('scripts')
+                .insert([{ name, game, code, user_id: currentUser.id }]);
+
+            if (error) {
+                showToast('Erro ao salvar no Supabase.', 'error');
+                console.error(error);
+            } else {
+                document.getElementById('scriptName').value = '';
+                document.getElementById('scriptCode').value = '';
+                closeScriptModal();
+                showToast('Script salvo com sucesso!', 'success');
+                fetchScripts();
+            }
+        } catch (e) {
+            showToast('Não foi possível conectar. Tente novamente.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerText = originalLabel;
         }
     }
 
     async function deleteScript(id) {
-        if (!isAdmin) return alert('Somente o dono pode apagar scripts!');
+        if (!isAdmin) return showToast('Somente o dono pode apagar scripts!', 'error');
         
         if(confirm('Tem certeza que deseja apagar permanentemente da nuvem?')) {
-            const { error } = await supabase
+            const { error } = await sb
                 .from('scripts')
                 .delete()
                 .eq('id', id);
                 
-            if (!error) fetchScripts();
+            if (!error) { fetchScripts(); showToast('Script apagado.', 'success'); }
+            else showToast('Erro ao apagar.', 'error');
         }
     }
 
@@ -560,21 +743,21 @@
     function toggleAdmin() {
         if (isAdmin) {
             isAdmin = false;
-            alert('Modo Dono desativado.');
+            showToast('Modo Dono desativado.', 'success');
         } else {
             const pass = prompt('Senha do Dono:');
             if (pass === 'ninja123') {
                 isAdmin = true;
-                alert('Modo Dono ativado! Você pode apagar scripts agora.');
+                showToast('Modo Dono ativado!', 'success');
             } else if (pass) {
-                alert('Senha incorreta!');
+                showToast('Senha incorreta!', 'error');
             }
         }
         filterScripts(); // atualiza a tela
     }
 
     function openScriptModal() {
-        if (!currentUser) return alert('Crie uma conta ou faça login primeiro!');
+        if (!currentUser) return showToast('Crie uma conta ou faça login primeiro!', 'error');
         document.getElementById('scriptModal').style.display = 'flex';
     }
 
@@ -626,16 +809,16 @@
         }
 
         let html = '<div class="script-list">';
-        filtered.forEach(s => {
+        filtered.forEach((s, i) => {
             const safeCode = btoa(unescape(encodeURIComponent(s.code)));
             // Só mostra o botão de apagar se for o admin
             const deleteBtnStyle = isAdmin ? 'display: block;' : 'display: none;';
 
             html += `
-                <div class="script-card">
+                <div class="script-card" style="animation-delay:${Math.min(i, 10) * 0.05}s">
                     <div class="script-info">
-                        <h3>${s.name}</h3>
-                        <span class="tag">${s.game}</span>
+                        <h3>${escapeHtml(s.name)}</h3>
+                        <span class="tag">${escapeHtml(s.game)}</span>
                     </div>
                     <div class="action-btns">
                         <button class="btn-outline" onclick="copyScript(this, '${safeCode}')">Copiar Script</button>
