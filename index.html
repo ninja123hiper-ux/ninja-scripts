@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥷 Ninja Scripts</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥷</text></svg>">
+    <style>
+        :root {
+            --bg-color: #0F0F13;
+            --panel-bg: #1C1C22;
+            --text-main: #FFFFFF;
+            --text-muted: #8F8F99;
+            --accent: #7C3AED;
+            --accent-hover: #6D28D9;
+            --border: #2D2D36;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+        .header {
+            background-color: var(--panel-bg);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .icon-box {
+            background-color: #8B5CF6;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+        }
+        .title h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10B981;
+            border-radius: 50%;
+        }
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+        .search-bar {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        .tab {
+            padding: 6px 14px;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+        .tab.active {
+            background-color: #2D2D36;
+            color: white;
+            border-color: #4B4B5C;
+        }
+        .tab:hover:not(.active) {
+            background-color: #25252D;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-muted);
+        }
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 40px;
+        }
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal {
+            background: var(--panel-bg);
+            padding: 24px;
+            border-radius: 12px;
+            width: 400px;
+            max-width: 90%;
+            border: 1px solid var(--border);
+        }
+        .modal h2 { margin-top: 0; font-size: 18px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; font-size: 14px; color: var(--text-muted); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 10px; border-radius: 6px; background: var(--bg-color); border: 1px solid var(--border); color: white; box-sizing: border-box;
+        }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .btn-secondary { background: transparent; border: 1px solid var(--border); color: white; padding: 10px 16px; border-radius: 8px; cursor: pointer; transition: 0.2s;}
+        .btn-secondary:hover { background: #2D2D36; }
+        
+        .script-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .script-card {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .script-info h3 { margin: 0 0 6px 0; font-size: 16px; }
+        .script-info p { margin: 0; font-size: 14px; color: var(--text-muted); }
+        .tag { display: inline-block; padding: 2px 8px; background: #2D2D36; border-radius: 4px; font-size: 12px; margin-top: 8px; }
+        .delete-btn { background: #EF4444; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s;}
+        .delete-btn:hover { background: #DC2626; }
+        .action-btns { display: flex; gap: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo-area">
+            <div class="icon-box">🥷</div>
+            <div class="title">
+                <h1>Ninja Scripts</h1>
+                <div class="sync-status">
+                    <div class="dot"></div> Sincronizado
+                </div>
+            </div>
+        </div>
+        <button class="btn-primary" onclick="openModal()">+ Novo Script</button>
+    </div>
+
+    <input type="text" class="search-bar" placeholder="Buscar por nome ou tag..." id="searchInput" onkeyup="renderScripts()">
+
+    <div class="tabs" id="categoryTabs">
+        <div class="tab active" onclick="setCategory('Todos')">Todos</div>
+        <div class="tab" onclick="setCategory('Blox Fruits')">Blox Fruits</div>
+        <div class="tab" onclick="setCategory('Roube um Ovo')">Roube um Ovo</div>
+        <div class="tab" onclick="setCategory('Campos de Batalha de Fruta')">Campos de Batalha de Fruta</div>
+        <div class="tab" onclick="setCategory('Adopt Me')">Adopt Me</div>
+        <div class="tab" onclick="setCategory('Brookhaven')">Brookhaven</div>
+    </div>
+
+    <div id="contentArea">
+        <!-- Scripts vão aparecer aqui -->
+    </div>
+
+    <div class="footer">
+        Seus scripts ficam salvos no seu navegador e sincronizam entre suas sessões.
+    </div>
+</div>
+
+<!-- Modal de Adicionar -->
+<div class="modal-overlay" id="modal">
+    <div class="modal">
+        <h2>Adicionar Novo Script</h2>
+        <div class="form-group">
+            <label>Nome do Script</label>
+            <input type="text" id="scriptName" placeholder="Ex: Auto Farm Level Max">
+        </div>
+        <div class="form-group">
+            <label>Jogo</label>
+            <select id="scriptGame">
+                <option value="Blox Fruits">Blox Fruits</option>
+                <option value="Roube um Ovo">Roube um Ovo</option>
+                <option value="Campos de Batalha de Fruta">Campos de Batalha de Fruta</option>
+                <option value="Adopt Me">Adopt Me</option>
+                <option value="Brookhaven">Brookhaven</option>
+                <option value="Outros">Outros</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Código do Script</label>
+            <textarea id="scriptCode" rows="4" placeholder="Cole o código lua aqui..."></textarea>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+            <button class="btn-primary" onclick="saveScript()">Salvar Script</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let scripts = JSON.parse(localStorage.getItem('ninjaScripts')) || [];
+    let currentCategory = 'Todos';
+
+    function openModal() {
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('modal').style.display = 'none';
+        document.getElementById('scriptName').value = '';
+        document.getElementById('scriptCode').value = '';
+    }
+
+    function saveScript() {
+        const name = document.getElementById('scriptName').value;
+        const game = document.getElementById('scriptGame').value;
+        const code = document.getElementById('scriptCode').value;
+
+        if(!name) return alert('Por favor, dê um nome ao script!');
+
+        scripts.push({ id: Date.now(), name, game, code });
+        localStorage.setItem('ninjaScripts', JSON.stringify(scripts));
+        
+        closeModal();
+        renderScripts();
+    }
+
+    function deleteScript(id) {
+        if(confirm('Tem certeza que deseja apagar este script?')) {
+            scripts = scripts.filter(s => s.id !== id);
+            localStorage.setItem('ninjaScripts', JSON.stringify(scripts));
+            renderScripts();
+        }
+    }
+    
+    function copyScript(btn, codeBase64) {
+        const code = decodeURIComponent(escape(atob(codeBase64)));
+        navigator.clipboard.writeText(code);
+        const originalText = btn.innerText;
+        btn.innerText = 'Copiado!';
+        btn.style.borderColor = '#10B981';
+        btn.style.color = '#10B981';
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.style.borderColor = 'var(--border)';
+            btn.style.color = 'white';
+        }, 2000);
+    }
+
+    function setCategory(cat) {
+        currentCategory = cat;
+        document.querySelectorAll('.tab').forEach(t => {
+            t.classList.toggle('active', t.innerText === cat);
+        });
+        renderScripts();
+    }
+
+    function renderScripts() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const area = document.getElementById('contentArea');
+        
+        let filtered = scripts.filter(s => {
+            const matchesSearch = s.name.toLowerCase().includes(search) || s.game.toLowerCase().includes(search);
+            const matchesCat = currentCategory === 'Todos' || s.game === currentCategory;
+            return matchesSearch && matchesCat;
+        });
+
+        if (filtered.length === 0) {
+            area.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">📒</div>
+                    <h3>Nenhum script salvo ainda</h3>
+                    <p>Clique em "Novo Script" para adicionar o primeiro.</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '<div class="script-list">';
+        filtered.forEach(s => {
+            // Encode code safely to pass in HTML
+            const safeCode = btoa(unescape(encodeURIComponent(s.code)));
+            html += `
+                <div class="script-card">
+                    <div class="script-info">
+                        <h3>${s.name}</h3>
+                        <span class="tag">${s.game}</span>
+                    </div>
+                    <div class="action-btns">
+                        <button class="btn-secondary" onclick="copyScript(this, '${safeCode}')">Copiar</button>
+                        <button class="delete-btn" onclick="deleteScript(${s.id})">Apagar</button>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        area.innerHTML = html;
+    }
+
+    renderScripts();
+</script>
+</body>
+</html>
