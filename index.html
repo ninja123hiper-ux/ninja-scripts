@@ -570,8 +570,7 @@
 <body>
 
 <!-- Elementos do Fundo Dinâmico -->
-<div class="bg-dynamic">
-    <div class="orb orb-1"></div>
+<canvas id="bg-canvas"></canvas>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
 </div>
@@ -1247,6 +1246,116 @@
     fetchScripts();
     fetchExecutors();
 </script>
+<!-- Script do Fundo Low-Poly Animado -->
+<script>
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    let width, height;
+    let points = [];
+    let triangles = [];
+    
+    const gap = 120;
+    const lightRadius = 600;
+    
+    function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        initPoints();
+    }
+    
+    function initPoints() {
+        points = [];
+        triangles = [];
+        const cols = Math.ceil(width / gap) + 2;
+        const rows = Math.ceil(height / gap) + 2;
+        
+        for (let i = 0; i < cols; i++) {
+            for (let j = 0; j < rows; j++) {
+                points.push({
+                    x: i * gap - gap/2 + (Math.random() - 0.5) * gap * 0.8,
+                    y: j * gap - gap/2 + (Math.random() - 0.5) * gap * 0.8,
+                    baseX: i * gap - gap/2,
+                    baseY: j * gap - gap/2,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3
+                });
+            }
+        }
+        
+        for (let i = 0; i < cols - 1; i++) {
+            for (let j = 0; j < rows - 1; j++) {
+                const p1 = points[i * rows + j];
+                const p2 = points[(i + 1) * rows + j];
+                const p3 = points[i * rows + j + 1];
+                const p4 = points[(i + 1) * rows + j + 1];
+                
+                if (Math.random() > 0.5) {
+                    triangles.push([p1, p2, p3]);
+                    triangles.push([p2, p4, p3]);
+                } else {
+                    triangles.push([p1, p2, p4]);
+                    triangles.push([p1, p4, p3]);
+                }
+            }
+        }
+    }
+    
+    let time = 0;
+    function draw() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = '#050505';
+        ctx.fillRect(0, 0, width, height);
+        
+        time += 0.003;
+        const lx = width / 2 + Math.cos(time) * width * 0.4;
+        const ly = height / 2 + Math.sin(time * 0.7) * height * 0.4;
+        
+        points.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            if (Math.abs(p.x - p.baseX) > gap * 0.6) p.vx *= -1;
+            if (Math.abs(p.y - p.baseY) > gap * 0.6) p.vy *= -1;
+        });
+        
+        triangles.forEach(t => {
+            const cx = (t[0].x + t[1].x + t[2].x) / 3;
+            const cy = (t[0].y + t[1].y + t[2].y) / 3;
+            
+            const dx = cx - lx;
+            const dy = cy - ly;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            let intensity = Math.max(0, 1 - dist / lightRadius);
+            
+            const baseR = 10, baseG = 12, baseB = 14;
+            const r = Math.floor(baseR + intensity * 30);
+            const g = Math.floor(baseG + intensity * 35);
+            const b = Math.floor(baseB + intensity * 45);
+            
+            ctx.beginPath();
+            ctx.moveTo(t[0].x, t[0].y);
+            ctx.lineTo(t[1].x, t[1].y);
+            ctx.lineTo(t[2].x, t[2].y);
+            ctx.closePath();
+            
+            ctx.fillStyle = \gb(\, \, \)\;
+            ctx.strokeStyle = \gba(\, \, \, 0.2)\;
+            ctx.lineWidth = 1;
+            ctx.fill();
+            ctx.stroke();
+        });
+        
+        requestAnimationFrame(draw);
+    }
+    
+    window.addEventListener('resize', resize);
+    resize();
+    draw();
+</script>
 </body>
 </html>
+
 
