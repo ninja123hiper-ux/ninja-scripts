@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ninja Scripts</title>
-    <!-- Favicon corrigido (SVG de uma Shuriken/Espada para não bugar no Windows) -->
+    <!-- Favicon corrigido (SVG de uma Shuriken/Espada para nÃ£o bugar no Windows) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%232563EB'/><stop offset='100%25' stop-color='%23EF4444'/></linearGradient></defs><rect width='24' height='24' rx='6' fill='%230a0e14'/><path d='M14.5 17.5L3 6V3h3l11.5 11.5' stroke='url(%23g)' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/><path d='M13 19l6-6' stroke='url(%23g)' stroke-width='2' fill='none' stroke-linecap='round'/><path d='M16 16l4 4' stroke='url(%23g)' stroke-width='2' fill='none' stroke-linecap='round'/><path d='M19 21l2-2' stroke='url(%23g)' stroke-width='2' fill='none' stroke-linecap='round'/><path d='M11 9L8 12' stroke='url(%23g)' stroke-width='2' fill='none' stroke-linecap='round'/></svg>">
     
     <!-- Fonte bonita do Google Fonts -->
@@ -43,7 +43,7 @@
             position: relative;
         }
 
-        /* Fundo Dinâmico com Orbes */
+        /* Fundo DinÃ¢mico com Orbes */
         .bg-dynamic {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -321,16 +321,18 @@
         }
         .search-wrapper:focus-within::after { opacity: 1; }
         
-        .tabs {
+                .tabs {
             display: flex;
             gap: 12px;
             margin-bottom: 32px;
             overflow-x: auto;
-            padding-bottom: 12px;
+            padding-bottom: 10px;
+            scroll-behavior: smooth;
         }
-        .tabs::-webkit-scrollbar { height: 6px; }
-        .tabs::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
-        .tabs::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        .tabs::-webkit-scrollbar { height: 5px; }
+        .tabs::-webkit-scrollbar-track { background: rgba(255,255,255,0.07); border-radius: 10px; }
+        .tabs::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.35); border-radius: 10px; }
+        .tabs::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.6); }
 
         .tab {
             padding: 10px 20px;
@@ -505,7 +507,7 @@
         .footer span { cursor: pointer; color: var(--text-muted); transition: all 0.3s ease; }
         .footer span:hover { color: white; text-shadow: 0 0 8px rgba(255,255,255,0.5); }
 
-        /* --- Animações --- */
+        /* --- AnimaÃ§Ãµes --- */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -623,7 +625,7 @@
 </head>
 <body>
 
-<!-- Elementos do Fundo Dinâmico -->
+<!-- Elementos do Fundo DinÃ¢mico -->
 <canvas id="bg-canvas"></canvas>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
@@ -665,14 +667,14 @@
 
     <div class="main-nav">
         <button class="main-nav-btn active" id="navScriptsBtn" onclick="switchSection('scripts')">
-            <span class="main-nav-icon">📜</span> Scripts
+            <span class="main-nav-icon">ðŸ“œ</span> Scripts
         </button>
         <button class="main-nav-btn" id="navExecutorsBtn" onclick="switchSection('executors')">
-            <span class="main-nav-icon">🛡️</span> Executores Oficiais
+            <span class="main-nav-icon">ðŸ›¡ï¸</span> Executores Oficiais
         </button>
     </div>
 
-    <!-- ===================== SEÇÃO: SCRIPTS ===================== -->
+    <!-- ===================== SEÃ‡ÃƒO: SCRIPTS ===================== -->
     <div id="scriptsSection">
         <div class="search-wrapper">
             <span class="search-icon">
@@ -681,20 +683,20 @@
                 </svg>
             </span>
             <input type="text" class="search-bar" placeholder="Buscar por nome ou jogo..." id="searchInput" onkeyup="filterScripts(); toggleClear(this)" autocomplete="off">
-            <button class="search-clear" id="clearSearchBtn" onclick="clearSearch()" title="Limpar">✕</button>
+            <button class="search-clear" id="clearSearchBtn" onclick="clearSearch()" title="Limpar">âœ•</button>
         </div>
 
         <div class="tabs" id="categoryTabs">
             <div class="tab active" onclick="setCategory('Todos')">Todos</div>
-            <div class="tab" onclick="setCategory('Blox Fruits')">🍈 Blox Fruits</div>
-            <div class="tab" onclick="setCategory('Roube um Ovo')">🥚 Roube um Ovo</div>
-            <div class="tab" onclick="setCategory('Adopt Me!')">🐾 Adopt Me!</div>
-            <div class="tab" onclick="setCategory('Brookhaven 🏡RP')">🏡 Brookhaven 🏡RP</div>
-            <div class="tab" onclick="setCategory('Tower of Hell')">🗼 Tower of Hell</div>
-            <div class="tab" onclick="setCategory('Murder Mystery 2')">🔪 Murder Mystery 2</div>
-            <div class="tab" onclick="setCategory('Piggy')">🐷 Piggy</div>
-            <div class="tab" onclick="setCategory('Arsenal')">🔫 Arsenal</div>
-            <div class="tab" onclick="setCategory('Jailbreak')">🚔 Jailbreak</div>
+            <div class="tab" onclick="setCategory('Blox Fruits')">ðŸˆ Blox Fruits</div>
+            <div class="tab" onclick="setCategory('Roube um Ovo')">ðŸ¥š Roube um Ovo</div>
+            <div class="tab" onclick="setCategory('Adopt Me!')">ðŸ¾ Adopt Me!</div>
+            <div class="tab" onclick="setCategory('Brookhaven ðŸ¡RP')">ðŸ¡ Brookhaven ðŸ¡RP</div>
+            <div class="tab" onclick="setCategory('Tower of Hell')">ðŸ—¼ Tower of Hell</div>
+            <div class="tab" onclick="setCategory('Murder Mystery 2')">ðŸ”ª Murder Mystery 2</div>
+            <div class="tab" onclick="setCategory('Piggy')">ðŸ· Piggy</div>
+            <div class="tab" onclick="setCategory('Arsenal')">ðŸ”« Arsenal</div>
+            <div class="tab" onclick="setCategory('Jailbreak')">ðŸš” Jailbreak</div>
         </div>
 
         <div id="contentArea">
@@ -702,12 +704,12 @@
         </div>
     </div>
 
-    <!-- ===================== SEÇÃO: EXECUTORES ===================== -->
+    <!-- ===================== SEÃ‡ÃƒO: EXECUTORES ===================== -->
     <div id="executorsSection" style="display:none;">
         <div class="section-header">
             <div>
-                <h2>🛡️ Executores Oficiais</h2>
-                <p class="section-subtitle">Downloads verificados, publicados só pela administração.</p>
+                <h2>ðŸ›¡ï¸ Executores Oficiais</h2>
+                <p class="section-subtitle">Downloads verificados, publicados sÃ³ pela administraÃ§Ã£o.</p>
             </div>
             <button class="btn-primary" id="addExecutorBtn" onclick="openExecutorModal()" style="display:none; background-color: var(--danger); box-shadow: 0 4px 12px rgba(239,68,68,0.35);">+ Adicionar Executor</button>
         </div>
@@ -726,7 +728,7 @@
         </div>
         <div class="form-group">
             <label>Senha</label>
-            <input type="password" id="authPassword" placeholder="Mínimo 6 caracteres" onkeydown="if(event.key==='Enter') handleAuth()">
+            <input type="password" id="authPassword" placeholder="MÃ­nimo 6 caracteres" onkeydown="if(event.key==='Enter') handleAuth()">
         </div>
         <div class="modal-actions">
             <button class="btn-outline" onclick="closeAuthModal()">Cancelar</button>
@@ -746,21 +748,21 @@
         <div class="form-group">
             <label>Jogo</label>
             <select id="scriptGame">
-                <option value="Blox Fruits">🍈 Blox Fruits</option>
-                <option value="Roube um Ovo">🥚 Roube um Ovo</option>
-                <option value="Adopt Me!">🐾 Adopt Me!</option>
-                <option value="Brookhaven 🏡RP">🏡 Brookhaven 🏡RP</option>
-                <option value="Tower of Hell">🗼 Tower of Hell</option>
-                <option value="Murder Mystery 2">🔪 Murder Mystery 2</option>
-                <option value="Piggy">🐷 Piggy</option>
-                <option value="Arsenal">🔫 Arsenal</option>
-                <option value="Jailbreak">🚔 Jailbreak</option>
-                <option value="Outros">🎮 Outros</option>
+                <option value="Blox Fruits">ðŸˆ Blox Fruits</option>
+                <option value="Roube um Ovo">ðŸ¥š Roube um Ovo</option>
+                <option value="Adopt Me!">ðŸ¾ Adopt Me!</option>
+                <option value="Brookhaven ðŸ¡RP">ðŸ¡ Brookhaven ðŸ¡RP</option>
+                <option value="Tower of Hell">ðŸ—¼ Tower of Hell</option>
+                <option value="Murder Mystery 2">ðŸ”ª Murder Mystery 2</option>
+                <option value="Piggy">ðŸ· Piggy</option>
+                <option value="Arsenal">ðŸ”« Arsenal</option>
+                <option value="Jailbreak">ðŸš” Jailbreak</option>
+                <option value="Outros">ðŸŽ® Outros</option>
             </select>
         </div>
         <div class="form-group">
-            <label>Código do Script</label>
-            <textarea id="scriptCode" rows="4" placeholder="Cole o código lua aqui..."></textarea>
+            <label>CÃ³digo do Script</label>
+            <textarea id="scriptCode" rows="4" placeholder="Cole o cÃ³digo lua aqui..."></textarea>
         </div>
         <div class="modal-actions">
             <button class="btn-outline" onclick="closeScriptModal()">Cancelar</button>
@@ -769,7 +771,7 @@
     </div>
 </div>
 
-<!-- Modal de Adicionar/Editar Executor (só admin) -->
+<!-- Modal de Adicionar/Editar Executor (sÃ³ admin) -->
 <div class="modal-overlay" id="executorModal">
     <div class="modal">
         <h2 id="executorModalTitle">Adicionar Executor Oficial</h2>
@@ -782,8 +784,8 @@
             <input type="text" id="executorUrl" placeholder="https://...">
         </div>
         <div class="form-group">
-            <label>Descrição (opcional)</label>
-            <textarea id="executorDesc" rows="3" placeholder="Observações, compatibilidade, versão, etc."></textarea>
+            <label>DescriÃ§Ã£o (opcional)</label>
+            <textarea id="executorDesc" rows="3" placeholder="ObservaÃ§Ãµes, compatibilidade, versÃ£o, etc."></textarea>
         </div>
         <div class="modal-actions">
             <button class="btn-outline" onclick="closeExecutorModal()">Cancelar</button>
@@ -795,7 +797,7 @@
 <div id="toastBox"></div>
 
 <script>
-    // Conexão com o Supabase usando as chaves fornecidas
+    // ConexÃ£o com o Supabase usando as chaves fornecidas
     const SUPABASE_URL = 'https://qdrqqyrkbvzpschcdlws.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_Ukvl_bK8a0okV6Z_7Fc0xA_nU_y5Yk8';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -829,34 +831,34 @@
             .replace(/"/g, '&quot;');
     }
 
-    // Ícone temático por jogo (emoji, já que logos oficiais não podem ser usados)
+    // Ãcone temÃ¡tico por jogo (emoji, jÃ¡ que logos oficiais nÃ£o podem ser usados)
     const GAME_ICONS = {
-        'Blox Fruits': '🍈',
-        'Roube um Ovo': '🥚',
-        'Adopt Me!': '🐾',
-        'Brookhaven 🏡RP': '🏡',
-        'Tower of Hell': '🗼',
-        'Murder Mystery 2': '🔪',
-        'Piggy': '🐷',
-        'Arsenal': '🔫',
-        'Jailbreak': '🚔'
+        'Blox Fruits': 'ðŸˆ',
+        'Roube um Ovo': 'ðŸ¥š',
+        'Adopt Me!': 'ðŸ¾',
+        'Brookhaven ðŸ¡RP': 'ðŸ¡',
+        'Tower of Hell': 'ðŸ—¼',
+        'Murder Mystery 2': 'ðŸ”ª',
+        'Piggy': 'ðŸ·',
+        'Arsenal': 'ðŸ”«',
+        'Jailbreak': 'ðŸš”'
     };
     function gameIcon(game) {
-        return GAME_ICONS[game] || '🎮';
+        return GAME_ICONS[game] || 'ðŸŽ®';
     }
 
     function translateAuthError(msg) {
         if (!msg) return 'Ocorreu um erro. Tente novamente.';
         const m = msg.toLowerCase();
-        if (m.includes('already registered') || m.includes('already exists')) return 'Este e-mail já possui uma conta. Tente entrar.';
+        if (m.includes('already registered') || m.includes('already exists')) return 'Este e-mail jÃ¡ possui uma conta. Tente entrar.';
         if (m.includes('invalid login credentials')) return 'E-mail ou senha incorretos.';
         if (m.includes('email not confirmed')) return 'Confirme seu e-mail antes de entrar (verifique sua caixa de entrada).';
-        if (m.includes('password') && m.includes('6')) return 'A senha precisa ter no mínimo 6 caracteres.';
-        if (m.includes('invalid email')) return 'Digite um e-mail válido.';
+        if (m.includes('password') && m.includes('6')) return 'A senha precisa ter no mÃ­nimo 6 caracteres.';
+        if (m.includes('invalid email')) return 'Digite um e-mail vÃ¡lido.';
         return msg;
     }
 
-    // --- Autenticação ---
+    // --- AutenticaÃ§Ã£o ---
     async function checkUser() {
         const { data: { session } } = await sb.auth.getSession();
         currentUser = session ? session.user : null;
@@ -870,7 +872,7 @@
         updateUI();
     });
 
-    // Verifica no banco se a conta logada é admin (coluna is_admin em profiles)
+    // Verifica no banco se a conta logada Ã© admin (coluna is_admin em profiles)
     async function refreshAdminStatus() {
         if (!currentUser) { isAdmin = false; return; }
         try {
@@ -889,7 +891,7 @@
         if (currentUser) {
             document.getElementById('guestActions').style.display = 'none';
             document.getElementById('userActions').style.display = 'flex';
-            document.getElementById('userEmailDisplay').innerText = currentUser.email + (isAdmin ? ' 👑' : '');
+            document.getElementById('userEmailDisplay').innerText = currentUser.email + (isAdmin ? ' ðŸ‘‘' : '');
             document.getElementById('postScriptBtn').style.display = 'inline-block';
         } else {
             document.getElementById('guestActions').style.display = 'flex';
@@ -900,7 +902,7 @@
         renderExecutors();
     }
 
-    // --- Navegação principal: Scripts x Executores ---
+    // --- NavegaÃ§Ã£o principal: Scripts x Executores ---
     function switchSection(section) {
         const scriptsBtn = document.getElementById('navScriptsBtn');
         const execBtn = document.getElementById('navExecutorsBtn');
@@ -947,7 +949,7 @@
         if (!password) { passInput.classList.add('input-error'); return showToast('Digite sua senha.', 'error'); }
         if (authMode === 'register' && password.length < 6) {
             passInput.classList.add('input-error');
-            return showToast('A senha precisa ter no mínimo 6 caracteres.', 'error');
+            return showToast('A senha precisa ter no mÃ­nimo 6 caracteres.', 'error');
         }
 
         const btn = document.getElementById('authSubmitBtn');
@@ -976,7 +978,7 @@
                 showToast(translateAuthError(error.message), 'error');
             }
         } catch (e) {
-            showToast('Não foi possível conectar. Verifique sua internet.', 'error');
+            showToast('NÃ£o foi possÃ­vel conectar. Verifique sua internet.', 'error');
         } finally {
             btn.disabled = false;
             btn.innerText = originalLabel;
@@ -985,10 +987,10 @@
 
     async function logout() {
         await sb.auth.signOut();
-        showToast('Você saiu da sua conta.', 'success');
+        showToast('VocÃª saiu da sua conta.', 'success');
     }
 
-    // --- Funções de Banco de Dados (Supabase) ---
+    // --- FunÃ§Ãµes de Banco de Dados (Supabase) ---
     async function fetchScripts() {
         const { data, error } = await sb
             .from('scripts')
@@ -1008,7 +1010,7 @@
     let editingScriptId = null;
 
     async function saveScript() {
-        if (!currentUser) return showToast('Você precisa criar conta e entrar para postar scripts!', 'error');
+        if (!currentUser) return showToast('VocÃª precisa criar conta e entrar para postar scripts!', 'error');
         
         const nameInput = document.getElementById('scriptName');
         const codeInput = document.getElementById('scriptCode');
@@ -1019,7 +1021,7 @@
         nameInput.classList.remove('input-error');
         codeInput.classList.remove('input-error');
         if (!name) { nameInput.classList.add('input-error'); return showToast('Preencha o nome do script.', 'error'); }
-        if (!code.trim()) { codeInput.classList.add('input-error'); return showToast('Cole o código do script.', 'error'); }
+        if (!code.trim()) { codeInput.classList.add('input-error'); return showToast('Cole o cÃ³digo do script.', 'error'); }
 
         const btn = document.getElementById('saveScriptBtn');
         const label = document.getElementById('saveScriptBtnLabel');
@@ -1049,7 +1051,7 @@
                 fetchScripts();
             }
         } catch (e) {
-            showToast('Não foi possível conectar. Tente novamente.', 'error');
+            showToast('NÃ£o foi possÃ­vel conectar. Tente novamente.', 'error');
         } finally {
             btn.disabled = false;
             btn.innerHTML = `<span id="saveScriptBtnLabel">${originalLabel}</span>`;
@@ -1070,7 +1072,7 @@
         }
     }
 
-    // ================= EXECUTORES OFICIAIS (só admin adiciona/edita/apaga) =================
+    // ================= EXECUTORES OFICIAIS (sÃ³ admin adiciona/edita/apaga) =================
     let editingExecutorId = null;
 
     async function fetchExecutors() {
@@ -1096,7 +1098,7 @@
             html += `
                 <div class="executor-card" style="animation-delay:${Math.min(i, 10) * 0.05}s">
                     <div class="executor-info">
-                        <h3>🛡️ ${escapeHtml(ex.name)}</h3>
+                        <h3>ðŸ›¡ï¸ ${escapeHtml(ex.name)}</h3>
                         ${ex.description ? `<p>${escapeHtml(ex.description)}</p>` : ''}
                     </div>
                     <div class="executor-actions">
@@ -1112,7 +1114,7 @@
     }
 
     function openExecutorModal(id) {
-        if (!isAdmin) return showToast('Só o dono do site pode adicionar executores.', 'error');
+        if (!isAdmin) return showToast('SÃ³ o dono do site pode adicionar executores.', 'error');
 
         const nameInput = document.getElementById('executorName');
         const urlInput = document.getElementById('executorUrl');
@@ -1123,7 +1125,7 @@
             if (!ex) return;
             editingExecutorId = id;
             document.getElementById('executorModalTitle').textContent = 'Editar Executor';
-            document.getElementById('saveExecutorBtnLabel').textContent = 'Salvar Alterações';
+            document.getElementById('saveExecutorBtnLabel').textContent = 'Salvar AlteraÃ§Ãµes';
             nameInput.value = ex.name;
             urlInput.value = ex.url;
             descInput.value = ex.description || '';
@@ -1144,7 +1146,7 @@
     }
 
     async function saveExecutor() {
-        if (!isAdmin) return showToast('Só o dono do site pode adicionar executores.', 'error');
+        if (!isAdmin) return showToast('SÃ³ o dono do site pode adicionar executores.', 'error');
 
         const nameInput = document.getElementById('executorName');
         const urlInput = document.getElementById('executorUrl');
@@ -1181,7 +1183,7 @@
                 fetchExecutors();
             }
         } catch (e) {
-            showToast('Não foi possível conectar. Tente novamente.', 'error');
+            showToast('NÃ£o foi possÃ­vel conectar. Tente novamente.', 'error');
         } finally {
             btn.disabled = false;
             btn.innerHTML = `<span id="saveExecutorBtnLabel">${originalLabel}</span>`;
@@ -1189,7 +1191,7 @@
     }
 
     async function deleteExecutor(id) {
-        if (!isAdmin) return showToast('Só o dono do site pode apagar executores.', 'error');
+        if (!isAdmin) return showToast('SÃ³ o dono do site pode apagar executores.', 'error');
         if (confirm('Apagar esse executor da lista?')) {
             const { error } = await sb.from('executors').delete().eq('id', id);
             if (!error) { fetchExecutors(); showToast('Executor apagado.', 'success'); }
@@ -1199,7 +1201,7 @@
 
     // Abre o modal para criar um script novo (sem argumento) ou editar um existente (passando o id)
     function openScriptModal(id) {
-        if (!currentUser) return showToast('Crie uma conta ou faça login primeiro!', 'error');
+        if (!currentUser) return showToast('Crie uma conta ou faÃ§a login primeiro!', 'error');
 
         const nameInput = document.getElementById('scriptName');
         const gameSelect = document.getElementById('scriptGame');
@@ -1210,10 +1212,10 @@
         if (id) {
             const s = scriptsData.find(x => x.id === id);
             if (!s) return;
-            if (s.user_id !== currentUser.id && !isAdmin) return showToast('Você só pode editar seus próprios scripts.', 'error');
+            if (s.user_id !== currentUser.id && !isAdmin) return showToast('VocÃª sÃ³ pode editar seus prÃ³prios scripts.', 'error');
             editingScriptId = id;
             document.getElementById('scriptModalTitle').textContent = 'Editar Script';
-            document.getElementById('saveScriptBtnLabel').textContent = 'Salvar Alterações';
+            document.getElementById('saveScriptBtnLabel').textContent = 'Salvar AlteraÃ§Ãµes';
             nameInput.value = s.name;
             gameSelect.value = s.game;
             codeInput.value = s.code;
@@ -1286,9 +1288,9 @@
         if (filtered.length === 0) {
             area.innerHTML = `
                 <div class="empty-state">
-                    <div class="empty-icon">📂</div>
+                    <div class="empty-icon">ðŸ“‚</div>
                     <h3 style="margin-bottom: 8px;">Nenhum script encontrado</h3>
-                    <p>Faça login e seja o primeiro a postar!</p>
+                    <p>FaÃ§a login e seja o primeiro a postar!</p>
                 </div>
             `;
             return;
@@ -1297,9 +1299,9 @@
         let html = '<div class="script-list">';
         filtered.forEach((s, i) => {
             const safeCode = btoa(unescape(encodeURIComponent(s.code)));
-            // Editar: dono do script sempre pode; admin pode editar qualquer um também
+            // Editar: dono do script sempre pode; admin pode editar qualquer um tambÃ©m
             const showEdit = currentUser && (isAdmin || s.user_id === currentUser.id);
-            // Apagar: só a conta admin
+            // Apagar: sÃ³ a conta admin
             const showDelete = isAdmin;
 
             html += `
@@ -1435,8 +1437,20 @@ gba(\, \, \, 0.2)\;
     window.addEventListener('resize', resize);
     resize();
     draw();
+
+    // === Scroll horizontal das tabs com o scroll do mouse ===
+    const tabsEl = document.getElementById('categoryTabs');
+    if (tabsEl) {
+        tabsEl.addEventListener('wheel', function(e) {
+            if (e.deltaY !== 0) {
+                e.preventDefault();
+                tabsEl.scrollLeft += e.deltaY * 1.5;
+            }
+        }, { passive: false });
+    }
 </script>
 </body>
 </html>
+
 
 
